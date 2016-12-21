@@ -6,12 +6,15 @@ public class Watershed {
 
 		PriorityQueue<Point> mins = new PriorityQueue<>();
 
+		// int counter = 0;
+
 		for (int i = 0; i < terr.dim; i++) {
 			for (int j = 0; j < terr.dim; j++) {
 				if (terr.localMins[i][j]) {
+					// counter++;
 					Point p = new Point(i, j, terr.elevation[i][j]);
 					mins.add(p);
-					// System.out.println(i + " " + j);
+					// System.out.println(counter + ": " + i + " " + j);
 				}
 			}
 		}
@@ -30,13 +33,13 @@ public class Watershed {
 
 		PriorityQueue<Point> mins = queueAllMins(terr);
 
-		int[][] checks = {{-1,0},{0,1},{1,0},{0,1}};
+		int[][] checks = {{-1,0},{0,1},{1,0},{0,-1}};
 
 		while (!mins.isEmpty()) {
 
 			Point p = mins.poll();
 
-			System.out.println(terr.elevation[p.x][p.y]);
+			System.out.println(terr.elevation[p.x][p.y] + "\t" + p.x +", " + p.y);
 
 			for (int a = 0; a<4; a++) {
 
@@ -53,9 +56,9 @@ public class Watershed {
 			}
 		}
 
-		for (int i = 0; i < terr.dim; i++) {
-			// System.out.println(Arrays.toString(terr.shedLabel[i]));
-		}
+		// for (int i = 0; i < terr.dim; i++) {
+		//	 System.out.println(Arrays.toString(terr.shedLabel[i]));
+		// }
 
 		terr.display();
 

@@ -16,18 +16,19 @@ public class Terrain {
 
 		shedLabel = new Point[dim][dim];
 
-		for (int a = 0; a < dim * dim/3; a++) {
-			int h = (int) (Math.random() * 20 + 20);
+		int influence = (int) dim/3 + 1;
+
+		for (int a = 0; a < dim; a++) {
+			int h = (int) (Math.random() * 20 + 40);
 			int x = (int) (Math.random() * dim);
 			int y = (int) (Math.random() * dim);
 
-			for (int i = -4; i < 5; i++){
-				for (int j = -4; j < 5; j++){
+			for (int i = -1 * influence + 1; i < influence; i++){
+				for (int j = -1 * influence; j < influence; j++){
 					try {
 						int dist = Math.abs(i) + Math.abs(j);
-						elevation[x+i][y+j] += h * (double) (5-dist) / 5;
+						elevation[x+i][y+j] += h * (double) (influence-dist + 1) / influence;
 					} catch (Exception ignored) {
-						continue;
 					}
 				}
 			}
@@ -86,14 +87,15 @@ public class Terrain {
 				StdDraw.setPenColor(color, color, color);
 				StdDraw.filledRectangle(i+0.5, j+0.5, 0.5, 0.5);
 
+				double pr1 = 0.03 * ((double)20 / elevation.length);
 				if (localMins[i][j]) {
 					StdDraw.setPenColor(StdDraw.RED);
-					StdDraw.setPenRadius(0.025);
+					StdDraw.setPenRadius(pr1);
 					StdDraw.point(i+0.5,j+0.5);
 				}
 				if (localMaxs[i][j]) {
 					StdDraw.setPenColor(StdDraw.BLUE);
-					StdDraw.setPenRadius(0.025);
+					StdDraw.setPenRadius(pr1);
 					StdDraw.point(i+0.5,j+0.5);
 				}
 
@@ -104,8 +106,6 @@ public class Terrain {
 
 			}
 		}
-
-
 
 		StdDraw.show();
 
