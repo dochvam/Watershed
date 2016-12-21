@@ -1,3 +1,10 @@
+/**
+ * Randomly generated Terrain object. Can display w/ local mins and watersheds.
+ *
+ * @author <a href="mailto:bg5087a@american.edu">Ben Goldstein</a>
+ * @version 1.1
+ */
+
 import java.util.Arrays;
 
 public class Terrain {
@@ -8,16 +15,20 @@ public class Terrain {
 	public Point[][] shedLabel;
 	public int dim;
 
+
+     /**
+     * Terrain constructor.
+     *
+     * @param n is the dimension of the (square) terrain
+     */
 	public Terrain(int n) {
 
 		dim = n;
-
 		elevation = new int[dim][dim];
-
 		shedLabel = new Point[dim][dim];
 
+		// kind of naive algorithm for random terrain that has some smoothness (so there are watersheds)
 		int influence = (int) dim/3 + 1;
-
 		for (int a = 0; a < dim; a++) {
 			int h = (int) (Math.random() * 20 + 40);
 			int x = (int) (Math.random() * dim);
@@ -37,6 +48,10 @@ public class Terrain {
 		getLocalMins();
 	}
 
+     /**
+     * Updates local minima and maxima labels by looking at every adjacent tile and comaparing.
+     *
+     */
 	public void getLocalMins() {
 
 		localMins = new boolean[dim][dim];
@@ -73,6 +88,10 @@ public class Terrain {
 
 	}
 
+     /**
+     * Displays Terrain object using StdDraw library.
+     *
+     */
 	public void display() {
 
 		StdDraw.setCanvasSize(800, 800);
@@ -81,6 +100,7 @@ public class Terrain {
 		
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
+				// color each tile based on elevation value
 				int color = (int) (elevation[i][j] * 0.8);
 				if (color > 255) color = 255;
 				if (color < 0) color = 0;
@@ -88,6 +108,8 @@ public class Terrain {
 				StdDraw.filledRectangle(i+0.5, j+0.5, 0.5, 0.5);
 
 				double pr1 = 0.03 * ((double)20 / elevation.length);
+
+				// put a dot on each local min and max
 				if (localMins[i][j]) {
 					StdDraw.setPenColor(StdDraw.RED);
 					StdDraw.setPenRadius(pr1);
@@ -99,6 +121,7 @@ public class Terrain {
 					StdDraw.point(i+0.5,j+0.5);
 				}
 
+				// draw a red line at the border of two watersheds
 				StdDraw.setPenRadius(0.005);
 				StdDraw.setPenColor(StdDraw.RED);
 				if (i < dim-1 && shedLabel[i][j] != shedLabel[i+1][j]) StdDraw.line(i+1, j, i+1, j+1);
@@ -111,6 +134,9 @@ public class Terrain {
 
 	}
 
+     /**
+     * Tests the Terrain object by generating it, printing values, and then displaying
+     */
 	public static void main(String[] args) {
 
 		int n = 10;
